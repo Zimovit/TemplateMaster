@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.MainController">
+    <center>
+        <VBox spacing="10.0">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Список шаблонов:" />
+            <ListView fx:id="templateListView" prefHeight="300" />
+        </VBox>
+    </center>
+    <bottom>
+        <VBox spacing="10.0">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox spacing="10.0">
+                <Button text="Добавить шаблон" onAction="#onAddTemplate" />
+                <Button text="Удалить выбранный шаблон" onAction="#onDeleteTemplate" />
+                <Button text="Сгенерировать документы" onAction="#onGenerateDocuments" />
+                <Button text="Инструкция" onAction="#onInstruction" />
+            </HBox>
+            <HBox spacing="10.0">
+                <Button text="Создать таблицу по шаблону" onAction="#onCreateTableFromTemplate" />
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
