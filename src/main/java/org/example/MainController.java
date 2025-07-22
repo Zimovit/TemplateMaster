@@ -84,32 +84,38 @@ public class MainController {
 
     @FXML
     private void onCreateTableFromTemplate() {
-        DirectoryChooser dc = new DirectoryChooser();
-        File outputDir = dc.showDialog(stage);
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File outputDir = directoryChooser.showDialog(stage);
         if (outputDir == null) return;
-        String selected = templateListView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
+
+        String templateName = templateListView.getSelectionModel().getSelectedItem();
+        if (templateName == null || templateName.isBlank()) {
             alert("Шаблон не выбран.");
             return;
         }
 
-        File templateFile = TemplateManager.getTemplateDir().resolve(selected).toFile();
-        File outputFile = new File(outputDir, "Шаблон таблицы" + ".xlsx");
-        TemplateProcessor tp = TemplateProcessorFactory.fromFile(templateFile);
+        File templateFile = TemplateManager.getTemplateDir().resolve(templateName).toFile();
+        TemplateProcessor processor = TemplateProcessorFactory.fromFile(templateFile);
         Set<String> placeholders;
         try {
-            placeholders = tp.extractPlaceholders(templateFile);
-            if (placeholders.isEmpty()) {
-                alert("В шаблоне не найдено ни одного плейсхолдера.");
-                return;
-            }
-            XlsxTemplateBuilder.createTemplateFromPlaceholders(placeholders, outputFile);
-            alert("Успешно сгенерирована таблица по шаблону");
+            placeholders = processor.extractPlaceholders(templateFile);
         } catch (IOException e) {
-            alert("Ошибка при работе с файлом: " + e.getMessage());
-            throw new RuntimeException(e);
+            alert("Не удалось извлечь заголовки из шаблона.");
+            e.printStackTrace();
+            return;
         }
 
+        String outputFileName = "Таблица_" + templateName.replaceAll("\\.[^.]+$", "") + ".docx";
+        File outputFile = new File(outputDir, outputFileName);
+        try {
+            XlsxTemplateBuilder.createTemplateFromPlaceholders(placeholders, outputFile);
+        } catch (IOException e) {
+            alert("Не удалось создать таблицу по шаблону.");
+            e.printStackTrace();
+            return;
+        }
+
+        alert("Успешно сгенерирована таблица по шаблону.");
     }
 
     @FXML
