@@ -21,11 +21,13 @@ public class DocxProcessor implements TemplateProcessor {
     public void process(File templateFile, List<Map<String, String>> tableData, File targetDir) throws IOException {
         if (!targetDir.exists()) Files.createDirectories(targetDir.toPath());
 
+        byte[] templateBytes = Files.readAllBytes(templateFile.toPath());
+
         for (int i = 0; i < tableData.size(); i++) {
             Map<String, String> row = tableData.get(i);
 
-            try (FileInputStream fis = new FileInputStream(templateFile);
-                 XWPFDocument document = new XWPFDocument(fis)) {
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(templateBytes);
+                 XWPFDocument document = new XWPFDocument(bais)) {
 
                 replacePlaceholders(document, row);
 

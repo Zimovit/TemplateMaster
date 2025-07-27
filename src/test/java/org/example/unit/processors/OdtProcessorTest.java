@@ -8,7 +8,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.MockedStatic;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.OdfContentDom;
-import org.odftoolkit.odfdom.pkg.OdfFileDom;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
