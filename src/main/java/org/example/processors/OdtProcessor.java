@@ -20,18 +20,15 @@ public class OdtProcessor implements TemplateProcessor {
 
         for (int i = 0; i < tableData.size(); i++) {
             Map<String, String> row = tableData.get(i);
-            try {
-                OdfTextDocument document = OdfTextDocument.loadDocument(templateFile);
+            try (OdfTextDocument document = OdfTextDocument.loadDocument(templateFile)) {
                 OdfFileDom contentDom = document.getContentDom();
 
-                // Заменяем в параграфах
                 NodeList paragraphs = contentDom.getElementsByTagName("text:p");
                 for (int j = 0; j < paragraphs.getLength(); j++) {
                     Node p = paragraphs.item(j);
                     replaceInNode(p, row);
                 }
 
-                // Заменяем в ячейках таблиц
                 NodeList cells = contentDom.getElementsByTagName("table:table-cell");
                 for (int j = 0; j < cells.getLength(); j++) {
                     Node cell = cells.item(j);
@@ -46,7 +43,6 @@ public class OdtProcessor implements TemplateProcessor {
 
                 File outputFile = new File(targetDir, "document_" + (i + 1) + ".odt");
                 document.save(outputFile);
-
             } catch (Exception e) {
                 throw new IOException("Ошибка обработки документа ODT", e);
             }
