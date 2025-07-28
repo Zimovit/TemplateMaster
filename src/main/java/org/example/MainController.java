@@ -105,7 +105,7 @@ public class MainController {
             return;
         }
 
-        String outputFileName = "Таблица_" + templateName.replaceAll("\\.[^.]+$", "") + ".docx";
+        String outputFileName = "Таблица_" + templateName.replaceAll("\\.[^.]+$", "") + ".xlsx";
         File outputFile = new File(outputDir, outputFileName);
         try {
             XlsxTemplateBuilder.createTemplateFromPlaceholders(placeholders, outputFile);
