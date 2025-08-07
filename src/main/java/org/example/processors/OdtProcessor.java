@@ -100,5 +100,9 @@ public class OdtProcessor implements TemplateProcessor {
             placeholders.add(matcher.group(1));
         }
     }
+
+    public void generateSingleDocument(File templateFile, File targetFile) throws IOException {
+        //TODO implement
+    }
 }
 

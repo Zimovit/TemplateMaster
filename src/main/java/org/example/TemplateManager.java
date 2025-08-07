@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.stream.Stream;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import org.example.factories.FileFactory;
 
 public class TemplateManager {
     private static final Path templateDir = Paths.get(System.getProperty("user.home"), "LawyerHelper", "templates");
@@ -22,9 +23,7 @@ public class TemplateManager {
     }
 
     public static void loadTemplate(Stage stage) {
-        FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("DOCX or ODT", "*.docx", "*.odt"));
-        File selected = fc.showOpenDialog(stage);
+        File selected = FileFactory.getDocumentFile(stage);
         if (selected != null) {
             Path target = templateDir.resolve(selected.getName());
             try {

@@ -26,6 +26,7 @@
             </HBox>
             <HBox spacing="10.0">
                 <Button text="Создать таблицу по шаблону" onAction="#onCreateTableFromTemplate" />
+                <Button text="Создать одиночный документ" onAction="#onCreateSingleDocument" />
             </HBox>
         </VBox>
     </bottom>

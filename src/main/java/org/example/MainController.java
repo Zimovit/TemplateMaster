@@ -12,9 +12,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.factories.FileFactory;
 import org.example.factories.TemplateProcessorFactory;
 import org.example.interfaces.TemplateProcessor;
 
@@ -84,8 +84,7 @@ public class MainController {
 
     @FXML
     private void onCreateTableFromTemplate() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File outputDir = directoryChooser.showDialog(stage);
+        File outputDir = FileFactory.getDirectoryToSave(stage);
         if (outputDir == null) return;
 
         String templateName = templateListView.getSelectionModel().getSelectedItem();
@@ -116,6 +115,21 @@ public class MainController {
         }
 
         alert("Успешно сгенерирована таблица по шаблону.");
+    }
+
+    @FXML
+    private void onCreateSingleDocument() {
+        String selected = templateListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            File templateFile = TemplateManager.getTemplateDir().resolve(selected).toFile();
+
+            File targetFile = FileFactory.getFileToSave(stage);
+
+            DocumentGenerator.generateSingleDocument(templateFile, targetFile);
+            alert("Генерация документов для: " + selected);
+        } else {
+            alert("Шаблон не выбран.");
+        }
     }
 
     @FXML

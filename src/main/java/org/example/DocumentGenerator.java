@@ -2,23 +2,21 @@ package org.example;
 
 import javafx.scene.control.Alert;
 import javafx.stage.*;
+import org.example.factories.FileFactory;
 import org.example.factories.TableReaderFactory;
 import org.example.factories.TemplateProcessorFactory;
 import org.example.interfaces.TableReader;
 import org.example.interfaces.TemplateProcessor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class DocumentGenerator {
     public static void generateDocuments(Stage stage, File template) {
 
-        FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XLSX or ODS", "*.xlsx", "*.ods")
-        );
-        File table = fc.showOpenDialog(stage);
+        File table = FileFactory.getTableFile(stage);
         if (table == null) return;
 
         if (template == null) {
@@ -26,8 +24,7 @@ public class DocumentGenerator {
             return;
         }
 
-        DirectoryChooser dc = new DirectoryChooser();
-        File outputDir = dc.showDialog(stage);
+        File outputDir = FileFactory.getDirectoryToSave(stage);
         File targetDir = new File(outputDir, "Generated_" + System.currentTimeMillis());
         if (!targetDir.mkdir()) {
             System.out.println("Не удалось создать папку для результатов");
@@ -51,5 +48,19 @@ public class DocumentGenerator {
             alert.showAndWait();
         }
 
+    }
+
+    public static void generateSingleDocument(File templateFile, File targetFile){
+        TemplateProcessor templateProcessor = TemplateProcessorFactory.fromFile(templateFile);
+        try {
+            templateProcessor.generateSingleDocument(templateFile, targetFile);
+        } catch (IOException e) {
+            System.out.println(e.getMessage() + "--" + e.toString());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Не удалось сгенерировать документ");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 }
