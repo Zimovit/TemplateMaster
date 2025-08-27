@@ -1,11 +1,13 @@
 package org.example.processors;
 
+import org.example.Utils;
 import org.example.interfaces.TemplateProcessor;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.pkg.OdfFileDom;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.*;
 import org.w3c.dom.*;
@@ -101,8 +103,56 @@ public class OdtProcessor implements TemplateProcessor {
         }
     }
 
+    @Override
     public void generateSingleDocument(File templateFile, File targetFile) throws IOException {
-        //TODO implement
+        // Извлекаем плейсхолдеры
+        Set<String> placeholders = extractPlaceholders(templateFile);
+
+        if (placeholders.isEmpty()) {
+            // Просто копируем исходный файл
+            Files.copy(templateFile.toPath(), targetFile.toPath());
+            return;
+        }
+
+        // Запрашиваем у пользователя значения
+        Map<String, String> values = Utils.collectUserInputGUI(placeholders);
+        if (values == null) {
+            // Пользователь отменил
+            return;
+        }
+
+        try (OdfTextDocument document = OdfTextDocument.loadDocument(templateFile)) {
+            OdfFileDom contentDom = document.getContentDom();
+
+            // Замена в параграфах
+            NodeList paragraphs = contentDom.getElementsByTagName("text:p");
+            for (int i = 0; i < paragraphs.getLength(); i++) {
+                replaceInNode(paragraphs.item(i), values);
+            }
+
+            // Замена в ячейках таблиц
+            NodeList cells = contentDom.getElementsByTagName("table:table-cell");
+            for (int i = 0; i < cells.getLength(); i++) {
+                Node cell = cells.item(i);
+                NodeList children = cell.getChildNodes();
+                for (int j = 0; j < children.getLength(); j++) {
+                    Node item = children.item(j);
+                    if (item.getNodeType() == Node.ELEMENT_NODE && "text:p".equals(item.getNodeName())) {
+                        replaceInNode(item, values);
+                    }
+                }
+            }
+
+            // Создаем директорию, если нужно
+            File parentDir = targetFile.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                Files.createDirectories(parentDir.toPath());
+            }
+
+            document.save(targetFile);
+        } catch (Exception e) {
+            throw new IOException("Ошибка генерации ODT документа", e);
+        }
     }
 }
 

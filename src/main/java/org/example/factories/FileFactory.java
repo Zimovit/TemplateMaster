@@ -57,8 +57,7 @@ public class FileFactory {
     }
 
     public static File getFileToSave (Stage stage) {
-        File saveDir = new File(userDesktop);
-        return getFileToSave(stage, saveDir);
+        return getFileToSave(stage, getDefaultDirectory());
     }
 
     public static File getDirectoryToSave (Stage stage, String title, File initialDir) {
@@ -79,8 +78,7 @@ public class FileFactory {
     }
 
     public static File getTableFile (Stage stage) {
-        File initialDirectory = new File(userDesktop);
-        return getTableFile(stage, initialDirectory);
+        return getTableFile(stage, getDefaultDirectory());
     }
 
     public static File getDocumentFile (Stage stage, File initialDirectory) {
@@ -89,8 +87,10 @@ public class FileFactory {
     }
 
     public static File getDocumentFile (Stage stage) {
-        File initialDirectory = new File(userDesktop);
-        return getDocumentFile(stage, initialDirectory);
+        return getDocumentFile(stage, getDefaultDirectory());
+    }
+    private static File getDefaultDirectory () {
+        return new File(userDesktop);
     }
 
 }
