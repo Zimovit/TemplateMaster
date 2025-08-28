@@ -1,5 +1,6 @@
 package org.example.processors;
 
+import org.example.I18n;
 import org.example.Utils;
 import org.example.interfaces.TemplateProcessor;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
@@ -43,10 +44,10 @@ public class OdtProcessor implements TemplateProcessor {
                     }
                 }
 
-                File outputFile = new File(targetDir, "document_" + (i + 1) + ".odt");
+                File outputFile = new File(targetDir, I18n.get("file.name.document") + (i + 1) + ".odt");
                 document.save(outputFile);
             } catch (Exception e) {
-                throw new IOException("Ошибка обработки документа ODT", e);
+                throw new IOException("ODT document processing error", e);
             }
         }
     }
@@ -91,7 +92,7 @@ public class OdtProcessor implements TemplateProcessor {
                 }
             }
         } catch (Exception e) {
-            throw new IOException("Ошибка извлечения плейсхолдеров", e);
+            throw new IOException("Placeholders extraction error", e);
         }
         return placeholders;
     }
@@ -151,7 +152,7 @@ public class OdtProcessor implements TemplateProcessor {
 
             document.save(targetFile);
         } catch (Exception e) {
-            throw new IOException("Ошибка генерации ODT документа", e);
+            throw new IOException("ODT document generation error", e);
         }
     }
 }

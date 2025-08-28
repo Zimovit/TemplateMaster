@@ -38,7 +38,7 @@ public class OdsTableReader implements TableReader {
                 result.add(map);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка чтения ODS-файла", e);
+            throw new RuntimeException("ODS reading error", e);
         }
 
         return result;

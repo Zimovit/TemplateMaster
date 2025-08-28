@@ -41,7 +41,7 @@ public class XlsxTableReader implements TableReader {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка чтения XLSX-файла", e);
+            throw new RuntimeException("XLSX reading error", e);
         }
 
         return result;

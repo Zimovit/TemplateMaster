@@ -1,0 +1,4 @@
+
+app.title=Template Master
+label.language=English:
+button.instruction=How to

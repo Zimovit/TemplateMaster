@@ -3,6 +3,7 @@ package org.example.factories;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.example.I18n;
 
 import java.io.File;
 
@@ -34,7 +35,7 @@ public class FileFactory {
 
     public static File getFileToSave (Stage stage, File initialDir) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Сохранить как...");
+        fileChooser.setTitle(I18n.get("fileChooser.title.save"));
 
         // Фильтр по расширению DOCX
         fileChooser.getExtensionFilters().add(extensionFilterDocx);
@@ -46,7 +47,7 @@ public class FileFactory {
         }
 
         // Предлагаемое имя файла
-        fileChooser.setInitialFileName("Сгенерированный документ.docx");
+        fileChooser.setInitialFileName(I18n.get("file.name.generated") + ".docx");
 
         File targetFile = fileChooser.showSaveDialog(stage);
         if (targetFile != null && !targetFile.getName().toLowerCase().matches(".*\\.docx$")) {
@@ -68,11 +69,11 @@ public class FileFactory {
     }
 
     public static File getDirectoryToSave (Stage stage) {
-        return getDirectoryToSave(stage, "Сохранить в...", new File(userDesktop));
+        return getDirectoryToSave(stage, I18n.get("fileChooser.title.save"), new File(userDesktop));
     }
 
     public static File getTableFile (Stage stage, File initialDirectory) {
-        String title = "Выберите таблицу с данными для заполнения шаблона.";
+        String title = I18n.get("fileChooser.title.choseTable");
         return getFileChooser(title, initialDirectory, extensionFilterTable).showOpenDialog(stage);
 
     }
@@ -82,7 +83,7 @@ public class FileFactory {
     }
 
     public static File getDocumentFile (Stage stage, File initialDirectory) {
-        String title = "Выберите документ Word или OpenOffice";
+        String title = I18n.get("fileChooser.title.selectDocxOrOdt");
         return getFileChooser(title, initialDirectory, extensionFilterDocument).showOpenDialog(stage);
     }
 

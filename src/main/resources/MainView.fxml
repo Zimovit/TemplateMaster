@@ -4,12 +4,24 @@
 
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.MainController">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox spacing="10">
+                <Label text="%label.language"/>
+                <ComboBox fx:id="languageComboBox" prefWidth="150"/>
+            </HBox>
+        </VBox>
+    </top>
+
     <center>
         <VBox spacing="10.0">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Label text="Список шаблонов:" />
+            <Label text="%label.templates" />
             <ListView fx:id="templateListView" prefHeight="300" />
         </VBox>
     </center>
@@ -19,14 +31,14 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             <HBox spacing="10.0">
-                <Button text="Добавить шаблон" onAction="#onAddTemplate" />
-                <Button text="Удалить выбранный шаблон" onAction="#onDeleteTemplate" />
-                <Button text="Сгенерировать документы" onAction="#onGenerateDocuments" />
-                <Button text="Инструкция" onAction="#onInstruction" />
+                <Button text="%button.addTemplate" onAction="#onAddTemplate" />
+                <Button text="%button.deleteTemplate" onAction="#onDeleteTemplate" />
+                <Button text="%button.generateDocuments" onAction="#onGenerateDocuments" />
+                <Button text="%button.instruction" onAction="#onInstruction" />
             </HBox>
             <HBox spacing="10.0">
-                <Button text="Создать таблицу по шаблону" onAction="#onCreateTableFromTemplate" />
-                <Button text="Создать одиночный документ" onAction="#onCreateSingleDocument" />
+                <Button text="%button.generateTableFromTemplate" onAction="#onCreateTableFromTemplate" />
+                <Button text="%button.createSingleDocument" onAction="#onCreateSingleDocument" />
             </HBox>
         </VBox>
     </bottom>

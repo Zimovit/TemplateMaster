@@ -2,26 +2,40 @@ package org.example;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.Locale;
 
 
 public class App extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/MainView.fxml")));
-        Parent root = loader.load();
-        MainController controller = loader.getController();
-        controller.setStage(primaryStage);
 
-        Scene scene = new Scene(root, 600, 400);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
+    private static Stage primaryStage;
+    private static Locale currentLocale = new Locale("ru");
+
+    @Override
+    public void start (Stage stage) throws IOException {
+        primaryStage = stage;
+        loadMainView();
+    }
+
+    public static void switchLanguage (Locale locale) throws IOException {
+        currentLocale = locale;
+        loadMainView();
+    }
+
+    private static void loadMainView () throws IOException {
+        I18n.setLocale(currentLocale);
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("/MainView.fxml"), I18n.getBundle());
+        Scene scene = new Scene(loader.load());
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Генератор документов");
+        primaryStage.setTitle(I18n.get("app.title"));
         primaryStage.show();
+    }
+
+    public static Locale getCurrentLocale () {
+        return currentLocale;
     }
 
     public static void main(String[] args) {
@@ -31,4 +45,3 @@ public class App extends Application {
 }
 
 //TODO Запросив таблицу для генерации документов, приложение должно предлагать место для сохранения папки с документами, начиная с папки с таблицей
-//TODO поиск вообще должен начинаться с рабочего стола

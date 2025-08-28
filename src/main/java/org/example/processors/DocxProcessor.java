@@ -1,6 +1,7 @@
 package org.example.processors;
 
 import org.apache.poi.xwpf.usermodel.*;
+import org.example.I18n;
 import org.example.Utils;
 import org.example.interfaces.TemplateProcessor;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
@@ -29,7 +30,7 @@ public class DocxProcessor implements TemplateProcessor {
 
                 replacePlaceholders(document, row);
 
-                File outputFile = new File(targetDir, "document_" + (i + 1) + ".docx");
+                File outputFile = new File(targetDir, I18n.get("file.name.document") + (i + 1) + ".docx");
                 try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                     document.write(fos);
                 }

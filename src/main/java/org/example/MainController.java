@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,6 +22,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -38,11 +36,35 @@ public class MainController {
 
     private Stage stage;
 
+    @FXML private ComboBox<String> languageComboBox;
+
 
     @FXML
     public void initialize() {
         templateListView.setItems(templates);
         loadTemplatesFromDisk();
+        languageComboBox.setItems(FXCollections.observableArrayList("Русский", "English", "Italiano"));
+        if (App.getCurrentLocale().getLanguage().equals("en")) {
+            languageComboBox.getSelectionModel().select("English");
+        } else if (App.getCurrentLocale().getLanguage().equals("it")) {
+            languageComboBox.getSelectionModel().select("Italiano");
+        } else {
+            languageComboBox.getSelectionModel().select("Русский");
+        }
+
+        languageComboBox.setOnAction(e -> {
+            try {
+                if ("English".equals(languageComboBox.getValue())) {
+                    App.switchLanguage(new Locale("en"));
+                } else if ("Italiano".equals(languageComboBox.getValue())) {
+                    App.switchLanguage(new Locale("it"));
+                }else {
+                    App.switchLanguage(new Locale("ru"));
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
     }
 
@@ -66,10 +88,10 @@ public class MainController {
                 Files.deleteIfExists(file);
                 templates.remove(selected);
             } catch (IOException e) {
-                alert("Ошибка при удалении файла: " + e.getMessage());
+                alert(I18n.get("alert.errRemovingFile") + e.getMessage());
             }
         } else {
-            alert("Шаблон не выбран.");
+            alert(I18n.get("alert.templateNotChosen"));
         }
     }
 
@@ -79,9 +101,9 @@ public class MainController {
         if (selected != null) {
             File templateFile = TemplateManager.getTemplateDir().resolve(selected).toFile();
             DocumentGenerator.generateDocuments(stage, templateFile);
-            alert("Генерация документов для: " + selected);
+            alert(I18n.get("alert.documentGeneration") + selected);
         } else {
-            alert("Шаблон не выбран.");
+            alert(I18n.get("alert.templateNotChosen"));
         }
     }
 
@@ -92,7 +114,7 @@ public class MainController {
 
         String templateName = templateListView.getSelectionModel().getSelectedItem();
         if (templateName == null || templateName.isBlank()) {
-            alert("Шаблон не выбран.");
+            alert(I18n.get("alert.templateNotChosen"));
             return;
         }
 
@@ -102,22 +124,22 @@ public class MainController {
         try {
             placeholders = processor.extractPlaceholders(templateFile);
         } catch (IOException e) {
-            alert("Не удалось извлечь заголовки из шаблона.");
+            alert(I18n.get("alert.cannotExtractHeadings"));
             e.printStackTrace();
             return;
         }
 
-        String outputFileName = "Таблица_" + templateName.replaceAll("\\.[^.]+$", "") + ".xlsx";
+        String outputFileName = I18n.get("name.table") + templateName.replaceAll("\\.[^.]+$", "") + ".xlsx";
         File outputFile = new File(outputDir, outputFileName);
         try {
             XlsxTemplateBuilder.createTemplateFromPlaceholders(placeholders, outputFile);
         } catch (IOException e) {
-            alert("Не удалось создать таблицу по шаблону.");
+            alert(I18n.get("alert.cannotCreateTable"));
             e.printStackTrace();
             return;
         }
 
-        alert("Успешно сгенерирована таблица по шаблону.");
+        alert(I18n.get("alert.tableGenerated"));
     }
 
     @FXML
@@ -129,23 +151,25 @@ public class MainController {
             File targetFile = FileFactory.getFileToSave(stage);
 
             DocumentGenerator.generateSingleDocument(templateFile, targetFile);
-            alert("Генерация документов для: " + selected);
+            alert(I18n.get("alert.generatingDocuments")+ selected);
         } else {
-            alert("Шаблон не выбран.");
+            alert(I18n.get("alert.templateNotChosen"));
         }
     }
 
     @FXML
     private void onInstruction() {
+        String lang = App.getCurrentLocale().getLanguage();
+        String fileName = "/instruction_" + lang + ".txt";
         String content;
-        try (InputStream is = getClass().getResourceAsStream("/instruction.txt")) {
+        try (InputStream is = getClass().getResourceAsStream(fileName)) {
             if (is == null) {
-                alert("Файл инструкции не найден.");
+                alert(I18n.get("alert.instructionNotFound"));
                 return;
             }
             content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            alert("Ошибка при чтении инструкции: " + e.getMessage());
+            alert(I18n.get("alert.instructionReadingError")+ e.getMessage());
             return;
         }
 
@@ -153,7 +177,7 @@ public class MainController {
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
-        Button closeButton = new Button("Закрыть");
+        Button closeButton = new Button(I18n.get("button.close"));
         closeButton.setOnAction(e -> ((Stage) closeButton.getScene().getWindow()).close());
 
         HBox buttonBox = new HBox(closeButton);
@@ -167,7 +191,7 @@ public class MainController {
         Scene scene = new Scene(root, 500, 300);
 
         Stage instructionStage = new Stage();
-        instructionStage.setTitle("Инструкция");
+        instructionStage.setTitle(I18n.get("button.instruction"));
         instructionStage.setScene(scene);
         instructionStage.initModality(Modality.APPLICATION_MODAL);
         instructionStage.initOwner(templateListView.getScene().getWindow());
@@ -183,13 +207,13 @@ public class MainController {
                     .sorted()
                     .forEach(templates::add);
         } catch (IOException e) {
-            alert("Не удалось загрузить шаблоны: " + e.getMessage());
+            alert(I18n.get("alert.cannotLoadTemplates")+ e.getMessage());
         }
     }
 
     private void alert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Информация");
+        alert.setTitle(I18n.get("alert.title.information"));
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
