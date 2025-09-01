@@ -3,10 +3,12 @@ package org.example;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class App extends Application {
@@ -31,6 +33,9 @@ public class App extends Application {
         Scene scene = new Scene(loader.load());
         primaryStage.setScene(scene);
         primaryStage.setTitle(I18n.get("app.title"));
+        primaryStage.getIcons().add(
+                new Image(Objects.requireNonNull(App.class.getResourceAsStream("/icon.png")))
+        );
         primaryStage.show();
     }
 

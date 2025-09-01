@@ -8,7 +8,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -36,41 +38,81 @@ public class MainController {
 
     private Stage stage;
 
-    @FXML private ComboBox<String> languageComboBox;
+    @FXML private ComboBox<Locale> languageComboBox;
+
+    @FXML
+    private Region spacer;
 
 
     @FXML
     public void initialize() {
         templateListView.setItems(templates);
         loadTemplatesFromDisk();
-        languageComboBox.setItems(FXCollections.observableArrayList("Русский", "English", "Italiano"));
-        if (App.getCurrentLocale().getLanguage().equals("en")) {
-            languageComboBox.getSelectionModel().select("English");
-        } else if (App.getCurrentLocale().getLanguage().equals("it")) {
-            languageComboBox.getSelectionModel().select("Italiano");
-        } else {
-            languageComboBox.getSelectionModel().select("Русский");
-        }
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        ObservableList<Locale> locales = FXCollections.observableArrayList(
+                new Locale("ru"),
+                new Locale("en"),
+                new Locale("it")
+        );
+        languageComboBox.setItems(locales);
+        languageComboBox.setCellFactory(cb -> new ListCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(Locale locale, boolean empty) {
+                super.updateItem(locale, empty);
+                if (empty || locale == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    Image flag = new Image(
+                            getClass().getResourceAsStream("/flags/" + locale.getLanguage() + ".png")
+                    );
+                    imageView.setImage(flag);
+                    imageView.setFitWidth(24);
+                    imageView.setFitHeight(16);
+                    setGraphic(imageView);
+                    setText(null); // убираем текст
+                }
+            }
+        });
+
+        languageComboBox.setButtonCell(new ListCell<>() {
+            private final ImageView imageView = new ImageView();
+            @Override
+            protected void updateItem(Locale locale, boolean empty) {
+                super.updateItem(locale, empty);
+                if (empty || locale == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    Image flag = new Image(
+                            getClass().getResourceAsStream("/flags/" + locale.getLanguage() + ".png")
+                    );
+                    imageView.setImage(flag);
+                    imageView.setFitWidth(24);
+                    imageView.setFitHeight(16);
+                    setGraphic(imageView);
+                    setText(null);
+                }
+            }
+        });
+
+        Locale current = App.getCurrentLocale();
+        languageComboBox.getSelectionModel().select(locales.stream()
+                .filter(l -> l.getLanguage().equals(current.getLanguage()))
+                .findFirst()
+                .orElse(new Locale("en")));
 
         languageComboBox.setOnAction(e -> {
+            Locale selected = languageComboBox.getValue();
             try {
-                if ("English".equals(languageComboBox.getValue())) {
-                    App.switchLanguage(new Locale("en"));
-                } else if ("Italiano".equals(languageComboBox.getValue())) {
-                    App.switchLanguage(new Locale("it"));
-                }else {
-                    App.switchLanguage(new Locale("ru"));
-                }
+                App.switchLanguage(selected);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
 
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-        this.stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icon.png"))));
     }
 
     @FXML

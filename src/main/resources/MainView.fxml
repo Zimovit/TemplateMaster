@@ -4,24 +4,18 @@
 
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.MainController">
-    <top>
-        <VBox spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <HBox spacing="10">
-                <Label text="%label.language"/>
-                <ComboBox fx:id="languageComboBox" prefWidth="150"/>
-            </HBox>
-        </VBox>
-    </top>
-
     <center>
+
         <VBox spacing="10.0">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Label text="%label.templates" />
+            <HBox spacing="10">
+                <Label text="%label.templates" />
+                <Region fx:id="spacer" />
+                <Label text="%label.language"/>
+                <ComboBox fx:id="languageComboBox" prefWidth="150"/>
+            </HBox>
             <ListView fx:id="templateListView" prefHeight="300" />
         </VBox>
     </center>
