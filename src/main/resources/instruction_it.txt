@@ -1,0 +1,22 @@
+1. A cosa serve questo programma?
+
+Il programma è progettato per creare un gran numero di documenti a partire da un modello. La logica del lavoro è semplice: aggiungiamo un modello di documento in formato DOCX (Word) al programma, quindi selezioniamo questo modello, selezioniamo una tabella in formato XLSX (Excel) e otteniamo una cartella con i documenti compilati dalla tabella in base al modello.
+
+2. Come aggiungere un modello.
+
+Per prima cosa, è necessario il testo del documento in formato DOCX. È necessario creare un modello da esso. Modificare il documento come segue. Nei punti in cui è necessario compilare i dati della tabella, inserire i nomi delle colonne tra parentesi quadre.
+Ad esempio, si crea un gruppo di congratulazioni con il testo "Congratulazioni, Ivanov Ivan Ivanovich!". La colonna con il nome del destinatario nella tabella si chiama NOME E COGNOME. È necessario modificare il testo del documento in "Congratulazioni, [NOME E COGNOME]!".
+Salvare il documento. Dopodiché, apri il programma (se non è già aperto), clicca sul pulsante "Aggiungi modello" e seleziona il modello pronto. Verrà copiato nella memoria del programma e sarà disponibile per la selezione nella metà superiore della finestra.
+Si noti che le maiuscole e le minuscole dei nomi delle colonne nella tabella e nel modello devono corrispondere. Se il modello riporta [NOME E COGNOME], il programma non leggerà le colonne "NOME e COGNOME", "Nome E Cognome", "nome e cognome" dalla tabella, ecc.
+
+3. Come preparare una tabella.
+Quindi è tutto semplice: nella prima riga della tabella, scrivi i nomi delle colonne. Ad esempio, NOME E COGNOME, DATA, MISURA_PIEDE - qualsiasi cosa, purché corrisponda alle etichette del modello. Le maiuscole e le minuscole sono importanti, vedi punto 2.
+Quindi compila le righe con i dati richiesti. Importante! Se nella cella è presente una data, il programma la converte nel formato gg.MM.aaaa, ovvero, ad esempio, 01.01.2001.
+
+4. Come generare documenti.
+Fai clic sul modello nella parte superiore della finestra del programma. Premi il pulsante "Genera documenti". Seleziona la tabella che desideri elaborare. Seleziona la cartella in cui desideri salvare i documenti. Ottimo!
+
+5. Come generare un singolo documento. Sì, a volte non è necessario crearne molti, solo uno. Seleziona un modello e premi il pulsante "Genera un singolo documento". Il programma ti chiederà di compilare i campi selezionati dal modello e di salvare il risultato.
+
+6. Come leggere le istruzioni.
+Non ho una risposta a questa domanda.

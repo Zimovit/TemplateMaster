@@ -1,4 +1,22 @@
+1. What is this program for?
 
-app.title=Template Master
-label.language=English:
-button.instruction=How to
+The program is designed to create a large number of documents from a template. The logic of the work is simple - we add a document template in DOCX format (Word) to the program, then select this template, select a table in XLSX format (Excel) and get a folder with documents filled in from the table in accordance with the template.
+
+2. How to add a template.
+
+First, you need the text of the document in DOCX format. You need to make a template out of it. Edit the document as follows. In those places that you need to fill in from the table, put the column names in square brackets.
+For example, you create a bunch of congratulations with the text "Congratulations, Ivanov Ivan Ivanovich!". The column with the name of the addressee in your table is called FULL NAME. You need to change the text of the document to "Congratulations, [FULL NAME]!".
+Save the document. After that, open the program (if it is not already open), click the "Add template" button and point to the ready template. It will be copied to the program storage and will be available for selection in the upper half of the window.
+Note that the column name case in the table and in the template must match. If the template says [FULL NAME], the program will not read the "Full Name", "Full name", "full name" columns from the table, etc.
+
+3. How to prepare a table.
+Everything is simple here, in the first row of the table, write the column names. For example, FULL NAME, DATE, FOOT_SIZE - anything, as long as it matches the labels from the template. The case matters, see point 2.
+Then fill in the lines with the required data. Important! If there is a date in the cell, the program converts it to the dd.MM.yyyy format, that is, for example, 01.01.2001.
+
+4. How to generate documents.
+Click on the template at the top of the program window. Press the "Generate documents" button. Select the table you want to process. Select the folder where you want to save the documents. You are great!
+
+5. How to generate a single document. Yes, sometimes there is no need to make a bunch, just one. Select a template and press the "Generate a single document" button. The program will prompt you to fill in the fields selected from the template and save the result.
+
+6. How to read the instructions.
+I don't have an answer to this question.
