@@ -12,13 +12,13 @@ import javafx.scene.control.Alert.AlertType;
 import org.example.factories.FileFactory;
 
 public class TemplateManager {
-    private static final Path templateDir = Paths.get(System.getProperty("user.home"), "LawyerHelper", "templates");
+    private static final Path templateDir = Paths.get(System.getProperty("user.home"), "TemplateMaster", "templates");
 
     static {
         try {
             Files.createDirectories(templateDir);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to create template directory", e);
+            alert(I18n.get("alert.cannotCreateTemplateFolder"));
         }
     }
 
@@ -31,9 +31,9 @@ public class TemplateManager {
                 if (Files.exists(target)) {
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                     confirm.initOwner(stage);
-                    confirm.setTitle("Подтверждение замены");
+                    confirm.setTitle(I18n.get("confirm.confirmReplacement"));
                     confirm.setHeaderText(null);
-                    confirm.setContentText("Файл " + selected.getName() + " уже существует. Заменить?");
+                    confirm.setContentText(selected.getName() + I18n.get("confirm.alreadyExists"));
 
                     Optional<ButtonType> answer = confirm.showAndWait();
                     if (answer.isEmpty() || answer.get() != ButtonType.OK) {
@@ -44,12 +44,7 @@ public class TemplateManager {
                 Files.copy(selected.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
 
 
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.initOwner(stage);
-                alert.setTitle("Успех");
-                alert.setHeaderText(null);
-                alert.setContentText("Шаблон успешно загружен: " + selected.getName());
-                alert.showAndWait();
+                alert(I18n.get("alert.templateLoadedSuccessfully") + selected.getName());
 
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save template", e);
@@ -82,5 +77,13 @@ public class TemplateManager {
 
     public static Path getTemplateDir() {
         return templateDir;
+    }
+
+    private static void alert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(I18n.get("alert.title.information"));
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

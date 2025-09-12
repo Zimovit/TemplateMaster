@@ -20,14 +20,14 @@ public class DocumentGenerator {
         if (table == null) return;
 
         if (template == null) {
-            System.out.println("Шаблон или таблица не выбраны");
+            alert(I18n.get("alert.templateNotChosen"));
             return;
         }
 
         File outputDir = FileFactory.getDirectoryToSave(stage);
         File targetDir = new File(outputDir, "Generated_" + System.currentTimeMillis());
         if (!targetDir.mkdir()) {
-            System.out.println("Не удалось создать папку для результатов");
+            alert(I18n.get("alert.cannotCreateResultFolder"));
             return;
         }
         if (outputDir == null) return;
@@ -40,12 +40,7 @@ public class DocumentGenerator {
             TemplateProcessor templateProcessor = TemplateProcessorFactory.fromFile(template);
             templateProcessor.process(template, parsedTable, targetDir);
         } catch (Exception e) {
-            System.out.println(e.getMessage() + "--" + e.toString());
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Не удалось сгенерировать документы");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            alert(I18n.get("alert.cannotGenerateDocuments"));
         }
 
     }
@@ -55,12 +50,15 @@ public class DocumentGenerator {
         try {
             templateProcessor.generateSingleDocument(templateFile, targetFile);
         } catch (IOException e) {
-            System.out.println(e.getMessage() + "--" + e.toString());
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Не удалось сгенерировать документ");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            alert(I18n.get("alert.cannotGenerateDocuments"));
         }
+    }
+
+    private static void alert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(I18n.get("alert.title.information"));
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
