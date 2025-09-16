@@ -24,7 +24,7 @@ public class DocumentGenerator {
             return;
         }
 
-        File outputDir = FileFactory.getDirectoryToSave(stage);
+        File outputDir = FileFactory.getDirectoryToSave(stage, "fileChooser.title.save", table.getParentFile());
         File targetDir = new File(outputDir, "Generated_" + System.currentTimeMillis());
         if (!targetDir.mkdir()) {
             alert(I18n.get("alert.cannotCreateResultFolder"));
