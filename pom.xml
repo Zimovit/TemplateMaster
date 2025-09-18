@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
@@ -10,110 +11,15 @@
   <name>Template Master</name>
   <url>http://maven.apache.org</url>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
-        <configuration>
-          <mainClass>org.example.App</mainClass>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <source>17</source>
-          <target>17</target>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals><goal>shade</goal></goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>org.example.App</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals><goal>run</goal></goals>
-            <configuration>
-              <target>
-                <exec executable="${java.home}/bin/jlink">
-                  <arg value="--module-path"/>
-                  <arg value="${java.home}/jmods;C:\Users\user\IdeaProjects\LawerHelper\runtime\javafx-jmods-17.0.15"/>
-                  <arg value="--add-modules"/>
-                  <arg value="java.base,java.desktop,javafx.controls,javafx.fxml"/>
-                  <arg value="--output"/>
-                  <arg value="${project.build.directory}/runtime"/>
-                </exec>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- Surefire для запуска тестов -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.3</version>
-        <configuration>
-          <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-          </includes>
-        </configuration>
-      </plugin>
-
-      <!-- Failsafe для интеграционных тестов -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.2.3</version>
-        <configuration>
-          <includes>
-            <include>**/*IT.java</include>
-            <include>**/*IntegrationTest.java</include>
-          </includes>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <properties>
-    <maven.compiler.source>16</maven.compiler.source>
-    <maven.compiler.target>16</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.1</junit.version>
     <mockito.version>5.8.0</mockito.version>
     <testfx.version>4.0.18</testfx.version>
+    <javafx.version>17.0.16</javafx.version>
+    <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
   </properties>
 
   <repositories>
@@ -143,13 +49,14 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>17.0.15</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>17.0.15</version>
+      <version>${javafx.version}</version>
     </dependency>
+
     <!-- Тестирование -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -157,46 +64,36 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Мокирование -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Тестирование JavaFX UI -->
     <dependency>
       <groupId>org.testfx</groupId>
       <artifactId>testfx-core</artifactId>
       <version>${testfx.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.testfx</groupId>
       <artifactId>testfx-junit5</artifactId>
       <version>${testfx.version}</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Ассерты для сложных объектов -->
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>3.24.2</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Временные файлы и папки -->
     <dependency>
       <groupId>com.github.marschall</groupId>
       <artifactId>memoryfilesystem</artifactId>
@@ -204,4 +101,153 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <!-- JavaFX плагин для запуска -->
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>${javafx.maven.plugin.version}</version>
+        <configuration>
+          <mainClass>org.example.App</mainClass>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.example.App</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>create-runtime</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <delete dir="${project.build.directory}/runtime" failonerror="false"/>
+                <exec executable="${java.home}/bin/jlink" failonerror="true">
+                  <arg value="--module-path"/>
+                  <arg value="${java.home}/jmods;C:\javafx\javafx-jmods-17.0.16"/>
+                  <arg value="--add-modules"/>
+                  <arg value="java.base,java.desktop,java.logging,java.naming,java.security.jgss,java.instrument,java.management,java.prefs,java.xml,jdk.unsupported,javafx.controls,javafx.fxml,javafx.base,javafx.graphics"/>
+                  <arg value="--output"/>
+                  <arg value="${project.build.directory}/runtime"/>
+                  <arg value="--no-header-files"/>
+                  <arg value="--no-man-pages"/>
+                  <arg value="--compress=2"/>
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>create-executable</id>
+            <phase>install</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <exec executable="${java.home}/bin/jpackage" failonerror="true">
+                  <arg value="--type"/>
+                  <arg value="exe"/>
+                  <arg value="--input"/>
+                  <arg value="${project.build.directory}"/>
+                  <arg value="--dest"/>
+                  <arg value="dist"/>
+                  <arg value="--name"/>
+                  <arg value="TemplateMaster"/>
+                  <arg value="--main-class"/>
+                  <arg value="org.example.App"/>
+                  <arg value="--main-jar"/>
+                  <arg value="${project.artifactId}-${project.version}.jar"/>
+                  <arg value="--runtime-image"/>
+                  <arg value="${project.build.directory}/runtime"/>
+                  <arg value="--app-version"/>
+                  <arg value="${project.version}"/>
+                  <arg value="--icon"/>
+                  <arg value="src/main/resources/icon.ico"/>
+                  <arg value="--description"/>
+                  <arg value="Template Master Application"/>
+                  <!-- Windows specific options -->
+                  <arg value="--win-dir-chooser"/>
+                  <arg value="--win-menu"/>
+                  <arg value="--win-shortcut"/>
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Тестирование -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.3</version>
+        <configuration>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.2.3</version>
+        <configuration>
+          <includes>
+            <include>**/*IT.java</include>
+            <include>**/*IntegrationTest.java</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
